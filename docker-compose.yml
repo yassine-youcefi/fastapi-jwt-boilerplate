@@ -3,6 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
+    env_file: .env
     container_name: fastapi_app
     ports:
       - "8000:80"
@@ -15,11 +16,27 @@ services:
 
   mongo:
     image: mongo:latest
+    env_file: .env
     container_name: mongo_db
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - fastapi_app_network
+  
+  mongo-express:
+    image: mongo-express:latest
+    env_file: .env
+    container_name: mongo_express
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=your_username 
+      - ME_CONFIG_BASICAUTH_PASSWORD=your_password 
     networks:
       - fastapi_app_network
 
