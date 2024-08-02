@@ -6,8 +6,6 @@ from pymongo.collection import Collection
 # Create a MongoDB client
 client = MongoClient(settings.mongo_uri)
 
-# Access the specific database
-db = client["boilerplate"]  # Replace with your actual database name
+db = client["boilerplate"]
 
-# Access the collection
 users_collection: Collection = db["users"]
