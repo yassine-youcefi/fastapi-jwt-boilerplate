@@ -1,10 +1,9 @@
 from pymongo.errors import DuplicateKeyError
 from user.models.user_models import User
-from user.db.mongodb import get_user_collection
+from user.db.mongodb import users_collection
 from bson.objectid import ObjectId
 from typing import Optional
 
-users_collection = get_user_collection()
 
 class UserController:
     async def create_user(self, user_data: User) -> Optional[User]:
@@ -13,11 +12,9 @@ class UserController:
         try:
             # Insert the user data into the collection
             result = users_collection.insert_one(user_dict)
-            print('Inserted ID:', result.inserted_id)
             
             # Fetch the inserted document using the correct ObjectId query
             created_user = users_collection.find_one({"_id": result.inserted_id})
-            print('Created User:', created_user)
             
             if created_user is None:
                 raise ValueError("User was not created successfully.")

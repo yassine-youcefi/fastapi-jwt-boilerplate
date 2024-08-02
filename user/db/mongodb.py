@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 from core.config import settings
+from pymongo.collection import Collection
+
 
 # Create a MongoDB client
 client = MongoClient(settings.mongo_uri)
@@ -8,7 +10,4 @@ client = MongoClient(settings.mongo_uri)
 db = client["boilerplate"]  # Replace with your actual database name
 
 # Access the collection
-users_collection = db["users"]
-
-def get_user_collection():
-    return users_collection
+users_collection: Collection = db["users"]
