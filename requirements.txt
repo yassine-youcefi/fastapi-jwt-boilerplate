@@ -5,4 +5,5 @@ python-jose==3.3.0
 passlib[bcrypt]==1.7.4  # for hashing passwords
 fastapi-utils==0.2.0
 python-dotenv==1.0.1
+watchdog==4.0.1
 uvicorn
