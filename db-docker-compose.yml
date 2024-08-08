@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    env_file: .env
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fastapi_app_network
+  
+  mongo-express:
+    image: mongo-express:latest
+    env_file: .env
+    container_name: mongo_express
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=${ME_CONFIG_MONGODB_SERVER}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD} 
+    networks:
+      - fastapi_app_network
+
+volumes:
+  mongo_data:
+
+networks:
+  fastapi_app_network:
+    driver: bridge

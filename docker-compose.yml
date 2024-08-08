@@ -7,41 +7,12 @@ services:
     container_name: fastapi_app
     ports:
       - "8000:80"
-    depends_on:
-      - mongo
     # This should match the CMD from the Dockerfile or be complete if defined here
-    command: uvicorn main:app --host 0.0.0.0 --port 80
+    command: uvicorn main:app --host 0.0.0.0 --port 80 --reload --reload-dir /code
     networks:
       - fastapi_app_network
-
-  mongo:
-    image: mongo:latest
-    env_file: .env
-    container_name: mongo_db
-    ports:
-      - "27017:27017"
     volumes:
-      - mongo_data:/data/db
-    networks:
-      - fastapi_app_network
-  
-  mongo-express:
-    image: mongo-express:latest
-    env_file: .env
-    container_name: mongo_express
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mongo
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=${ME_CONFIG_MONGODB_SERVER}
-      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD} 
-    networks:
-      - fastapi_app_network
-
-volumes:
-  mongo_data:
+      - .:/code
 
 networks:
   fastapi_app_network:

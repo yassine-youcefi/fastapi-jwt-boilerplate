@@ -17,5 +17,5 @@ COPY . /code/
 
 EXPOSE 80
 
-# Run uvicorn server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+# Run uvicorn serve, watchdog to monitor changes and restart the server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--reload", "--reload-dir", "/code"]
