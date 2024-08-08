@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from user.models.user_models import User
 from user.controllers.user_controllers import UserController
-from user.models.user_models import User
+from user.models.user_models import User, UserUpdate
 from user.db.mongodb import get_db
 from pymongo.collection import Collection
 
@@ -24,3 +24,13 @@ async def get_user(user_id: str,  db: Collection = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+@router.put("/{user_id}/update", response_model=User)
+async def update_user(user_id: str, user: UserUpdate, db: Collection = Depends(get_db)):
+    try:
+        updated_user = await user_controller.update_user(user_id, user, db)
+        if not updated_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return updated_user
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

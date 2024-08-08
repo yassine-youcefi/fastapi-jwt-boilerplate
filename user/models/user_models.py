@@ -7,13 +7,12 @@ class User(BaseModel):
     id: Optional[str] = Field(None, alias="_id")
     username: str
     email: str
-    first_name: str
-    last_name: str
-    phone_number: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    phone_number: Optional[str] = None
     hashed_password: Optional[str] = None
     
     class Config:
-        # Allow population by field alias to ensure the model uses the alias
         allow_population_by_field_name = True
     
     @validator("id", pre=True, always=True)
@@ -21,3 +20,15 @@ class User(BaseModel):
         if isinstance(value, ObjectId):
             return str(value)
         return value
+    
+
+class UserUpdate(BaseModel):
+    username: Optional[str]
+    email: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone_number: Optional[str]
+    hashed_password: Optional[str]
+
+    class Config:
+        allow_population_by_field_name = True
