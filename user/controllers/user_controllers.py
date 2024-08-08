@@ -21,8 +21,15 @@ class UserController:
                 raise ValueError("User was not created successfully.")
             
             return User(**created_user)
-        except DuplicateKeyError:
-            raise ValueError("Username or email already exists.")
+        
+        except DuplicateKeyError as e:
+            # Check which field caused the error
+            if "username" in str(e):
+                raise ValueError("Username already exists.")
+            elif "email" in str(e):
+                raise ValueError("Email already exists.")
+            else:
+                raise ValueError("Username or email already exists.")
 
     async def get_user_by_id(self, user_id: str, db: Collection) -> Optional[User]:
         users_collection = db["users"]
