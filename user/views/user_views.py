@@ -21,6 +21,7 @@ async def register_user(user: User, db: Collection = Depends(get_db)):
 @router.get("/{user_id}", response_model=User)
 async def get_user(user_id: str,  db: Collection = Depends(get_db)):
     user = await user_controller.get_user_by_id(user_id, db)
+    print('user:   ', user)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user

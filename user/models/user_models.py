@@ -1,5 +1,6 @@
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
+from bson import ObjectId
 
 
 class User(BaseModel):
@@ -14,3 +15,9 @@ class User(BaseModel):
     class Config:
         # Allow population by field alias to ensure the model uses the alias
         allow_population_by_field_name = True
+    
+    @validator("id", pre=True, always=True)
+    def convert_objectid(cls, value):
+        if isinstance(value, ObjectId):
+            return str(value)
+        return value
